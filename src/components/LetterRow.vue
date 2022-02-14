@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row">
-    <LetterTile v-for="index in wordLength" :key="`${index-1} tile`" :letter="letters[index-1] ?? ''"/>
+    <LetterTile v-for="index in wordLength" :key="`${index-1} tile`" :colour="colours[index-1]" :letter="letters[index-1] ?? ''"/>
   </div>
 </template>
 
@@ -24,6 +24,12 @@ export default defineComponent({
       type: Number,
       default: () => {
         return 5
+      }
+    },
+    colours:{
+      type: Array,
+      default: () => {
+        return []
       }
     }
   }
