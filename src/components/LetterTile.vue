@@ -1,14 +1,14 @@
 <template>
-  <div class="border border-solid border-2 border-gray-500 w-12 h-16 flex items-center justify-center"
-       :class="bgColour">
+  <div
+    class="border border-solid border-2 border-gray-500 w-12 h-16 flex items-center justify-center"
+    :class="bgColour"
+  >
     {{ letter }}
   </div>
 </template>
 
 <script>
-import {defineComponent} from "vue";
-
-export default defineComponent({
+export default {
   name: "LetterTile",
   props: {
     letter: {
@@ -17,27 +17,24 @@ export default defineComponent({
     },
     colour: {
       type: String,
-      default: 'no answer'
-    }
+      default: "no answer",
+    },
   },
   computed: {
     bgColour(props) {
       switch (props.colour) {
-        case 'correct':
-          return 'bg-green-400';
-        case 'wrong spot':
-          return 'bg-yellow-400';
-        case 'not in word':
-          return 'bg-gray-400';
+        case "correct":
+          return "bg-green-400";
+        case "wrong spot":
+          return "bg-yellow-400";
+        case "not in word":
+          return "bg-gray-400";
         default:
-          return 'bg-transparent';
+          return "bg-transparent";
       }
-    }
-  }
-})
-;
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
