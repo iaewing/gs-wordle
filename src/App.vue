@@ -27,6 +27,20 @@ export const FIVE_LETTER_WORDS = [
 ];
 
 
+function validateLettersWithColors(correctAnswer, currentGuess, guesses) {
+  const rightAnswer = correctAnswer.toUpperCase().split('');
+
+  guesses[currentGuess].word.map(function (letter, index) {
+    if (letter === rightAnswer[index]) {
+      guesses[currentGuess].colours.push('correct');
+    } else if (rightAnswer.includes(letter)) {
+      guesses[currentGuess].colours.push('wrong spot');
+    } else {
+      guesses[currentGuess].colours.push('not in word');
+    }
+  })
+}
+
 export default {
   name: 'App',
   data() {
@@ -42,6 +56,7 @@ export default {
       currentGuess: 0,
       isCorrect: false,
       wordList: "",
+      correctAnswer: this.getWinningWord()
     }
   },
   components: {
@@ -49,22 +64,16 @@ export default {
     SimpleKeyboard
   },
   methods: {
-    validateLettersWithColours() {
-      const rightAnswer = ("water").toUpperCase().split('');
+    getWinningWord() {
+      let wordArray = AllowedWords.split('\n');
+      const randomIndexOfWordArray = Math.floor(Math.random() * wordArray.length);
+      const chosenWord = wordArray[randomIndexOfWordArray];
+      console.log('chosen word:', wordArray[randomIndexOfWordArray]);
 
-      this.guesses[this.currentGuess].word.map(function (letter, index) {
-        console.log(letter, index, rightAnswer[index]);
-        if (letter === rightAnswer[index]) {
-          console.log('checking right answer');
-          this.guesses[this.currentGuess].colours.push('correct');
-        } else if (rightAnswer.includes(letter)) {
-          console.log('checking wrong answer');
-          this.guesses[this.currentGuess].colours.push('wrong spot');
-        } else {
-          console.log('checking for no answer');
-          this.guesses[this.currentGuess].colours.push('not in word');
-        }
-      }, this)
+      return chosenWord;
+    },
+    validateLettersWithColours() {
+      validateLettersWithColors(this.correctAnswer, this.currentGuess, this.guesses);
     },
     onKeyPress(button) {
       if (button === "{enter}") {
@@ -80,15 +89,15 @@ export default {
         return;
       }
       this.validateLettersWithColours();
-
-      this.currentGuess += 1;
-      if (this.guesses[this.currentGuess].colours.filter(color => color != 'correct').length === 0) {
-        alert('You won in ' + this.currentGuess + ' tries');
+      if (this.guesses[this.currentGuess].word.join('').toLowerCase() === this.correctAnswer) {
+        alert('You won in ' + (this.currentGuess + 1) + ' tries');
       }
+      this.currentGuess += 1;
     },
-    checkWord()
-    {
-      return AllowedWords.match(this.guesses[this.currentGuess].word);
+    checkWord() {
+      const guess = this.guesses[this.currentGuess].word;
+      const formattedGuess = Object.values(guess).join('').toLowerCase();
+      return AllowedWords.includes(formattedGuess);
     }
   }
 }
