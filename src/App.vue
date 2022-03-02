@@ -10,36 +10,13 @@
     </div>
     <SimpleKeyboard @onKeyPress="onKeyPress"/>
   </div>
-
 </template>
 
 <script>
 import LetterRow from "./components/LetterRow";
 import SimpleKeyboard from "@/components/SimpleKeyboard";
 import AllowedWords from 'raw-loader!../wordle-allowed-guesses.txt';
-
-export const FIVE_LETTER_WORDS = [
-  'fight',
-  'audio',
-  'weary',
-  'irate',
-  'lemon',
-];
-
-
-function validateLettersWithColors(correctAnswer, currentGuess, guesses) {
-  const rightAnswer = correctAnswer.toUpperCase().split('');
-
-  guesses[currentGuess].word.map(function (letter, index) {
-    if (letter === rightAnswer[index]) {
-      guesses[currentGuess].colours.push('correct');
-    } else if (rightAnswer.includes(letter)) {
-      guesses[currentGuess].colours.push('wrong spot');
-    } else {
-      guesses[currentGuess].colours.push('not in word');
-    }
-  })
-}
+import {validateLettersWithColors} from "./utilities";
 
 export default {
   name: 'App',
@@ -73,7 +50,7 @@ export default {
       return chosenWord;
     },
     validateLettersWithColours() {
-      validateLettersWithColors(this.correctAnswer, this.currentGuess, this.guesses);
+      this.guesses[this.currentGuess].word.colours = validateLettersWithColors(this.correctAnswer, this.currentGuess, this.guesses);
     },
     onKeyPress(button) {
       if (button === "{enter}") {
